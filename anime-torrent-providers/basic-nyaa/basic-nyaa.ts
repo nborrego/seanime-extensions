@@ -124,6 +124,14 @@ class Provider {
         return ret
     }
 
+    async getTorrentInfoHash(torrent: AnimeTorrent): Promise<string> {
+        return torrent.infoHash!
+    }
+
+    async getTorrentMagnetLink(torrent: AnimeTorrent): Promise<string> {
+        return torrent.magnetLink!
+    }
+
     toAnimeTorrent(torrent: NyaaTorrent): AnimeTorrent {
         return {
             name: torrent.title,
