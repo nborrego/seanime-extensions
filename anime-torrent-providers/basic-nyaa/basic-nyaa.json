@@ -2,7 +2,7 @@
   "id": "basic-nyaa-seanime",
   "name": "Basic Nyaa",
   "description": "Nyaa all categories with search only",
-  "manifestURI": "",
+  "manifestURI": "https://raw.githubusercontent.com/5rahim/seanime-extensions/refs/heads/main/anime-torrent-providers/basic-nyaa/basic-nyaa.json",
   "version": "1.0.0",
   "author": "Seanime",
   "type": "anime-torrent-provider",
