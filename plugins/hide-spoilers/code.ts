@@ -153,7 +153,6 @@ function init() {
                     progress = progress + 1
                 }
 
-
                 for (const episodeGridItem of episodeGridItems) {
                     const episodeNumberStr = episodeGridItem.attributes["data-episode-number"]
                     const episodeNumber = Number(episodeNumberStr)
@@ -192,6 +191,23 @@ function init() {
                         }
 
                         try {
+                            // data-episode-grid-item-filename
+                            const filenameSelection = $("[data-episode-grid-item-filename]")
+                            if (filenameSelection.length() !== 0 || !!filenameSelection.attr("id")) {
+                            }
+
+                            const filename = ctx.dom.asElement(filenameSelection.attr("id")!)
+                            if (hideTitles && episodeNumber > progress) {
+                                filename.setStyle("visibility", "hidden")
+                            } else {
+                                filename.removeStyle("visibility")
+                            }
+
+                        } catch(e) {
+
+                        }
+
+                        try {
                             const descriptionSelection = $("[data-episode-grid-item-episode-description]")
                             if (descriptionSelection.length() === 0 || !descriptionSelection.attr("id")) {
                                 continue
@@ -215,6 +231,10 @@ function init() {
             }
         }, { withInnerHTML: true, identifyChildren: true })
 
+        ctx.dom.observe("[data-anime-entry-list-data]", async (episodeCards) => {
+            refetchEpisodeCard()
+            refetchEpisodeGridItem()
+        })
 
         const hideThumbnailsRef = ctx.fieldRef<boolean>()
         const hideTitlesRef = ctx.fieldRef<boolean>()
