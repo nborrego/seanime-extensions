@@ -1,5 +1,17 @@
 [
   {
+    "id": "custom-banner-images",
+    "name": "Custom Banner Images",
+    "manifestURI": "https://raw.githubusercontent.com/5rahim/seanime-extensions/main/plugins/custom-banner-images/custom-banner-images.json",
+    "language": "typescript",
+    "type": "plugin",
+    "description": "Customize the banner images of anime and manga in your AniList collection.",
+    "author": "Seanime",
+    "icon": "https://raw.githubusercontent.com/5rahim/seanime-extensions/main/plugins/custom-banner-images/icon.png",
+    "website": "https://github.com/5rahim/seanime-extensions",
+    "lang": "multi"
+  },
+  {
     "id": "animeworld",
     "name": "AnimeWorld",
     "description": "Extension for AnimeWorld, an online streaming provider for subbed/dubbed anime in Italian",
