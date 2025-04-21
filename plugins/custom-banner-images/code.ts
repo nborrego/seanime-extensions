@@ -227,7 +227,7 @@ function init() {
                 const mediaId = e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const bannerImage = bannerImages[mediaId.toString()]
                 if (!!bannerImage) {
-                    $replace(e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage, bannerImage)
+                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage = bannerImage
                 }
             }
         }
@@ -253,7 +253,7 @@ function init() {
                 const mediaId = e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const bannerImage = bannerImages[mediaId.toString()]
                 if (!!bannerImage) {
-                    $replace(e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage, bannerImage)
+                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage = bannerImage
                 }
             }
         }
@@ -278,7 +278,7 @@ function init() {
                 const mediaId = e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const bannerImage = bannerImages[mediaId.toString()]
                 if (!!bannerImage) {
-                    $replace(e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage, bannerImage)
+                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage = bannerImage
                 }
             }
         }
@@ -304,7 +304,7 @@ function init() {
                 const mediaId = e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const bannerImage = bannerImages[mediaId.toString()]
                 if (!!bannerImage) {
-                    $replace(e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage, bannerImage)
+                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.bannerImage = bannerImage
                 }
             }
         }
