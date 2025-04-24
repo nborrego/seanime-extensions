@@ -12,9 +12,19 @@
     "lang": "multi"
   },
   {
+    "id": "gojowtf",
+    "name": "GojoWtf",
+    "description": "GojoWtf is an online streaming provider for subbed & dubbed anime in English. It supports two providers: Strix and Pahe, both of which support subs & dubs.",
+    "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/GojoWtf/manifest.json",
+    "author": "kRYstall9",
+    "type": "onlinestream-provider",
+    "language": "typescript",
+    "lang": "en"
+  },
+  {
     "id": "animeworld",
     "name": "AnimeWorld",
-    "description": "Extension for AnimeWorld, an online streaming provider for subbed/dubbed anime in Italian",
+    "description": "Extension for AnimeWorld, an online streaming provider for subbed & dubbed anime in Italian",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/AnimeWorld/manifest.json",
     "author": "kRYstall9",
     "type": "onlinestream-provider",
@@ -24,7 +34,7 @@
   {
     "id": "animekai",
     "name": "AnimeKai",
-    "description": "AnimeKai is an online streaming provider for subbed/dubbed anime in English",
+    "description": "AnimeKai is an online streaming provider for subbed & dubbed anime in English",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/AnimeKai/manifest.json",
     "author": "kRYstall9",
     "type": "onlinestream-provider",
@@ -56,7 +66,7 @@
   {
     "id": "animesaturn",
     "name": "AnimeSaturn",
-    "description": "AnimeSaturn is an online streaming provider for subbed/dubbed animes in Italian",
+    "description": "AnimeSaturn is an online streaming provider for subbed & dubbed anime in Italian",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/AnimeSaturn/manifest.json",
     "author": "kRYstall9",
     "type": "onlinestream-provider",
