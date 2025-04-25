@@ -12,6 +12,18 @@
     "lang": "multi"
   },
   {
+    "id": "custom-cover-images",
+    "name": "Custom Cover Images",
+    "manifestURI": "https://raw.githubusercontent.com/5rahim/seanime-extensions/main/plugins/custom-cover-images/custom-cover-images.json",
+    "language": "typescript",
+    "type": "plugin",
+    "description": "Customize the cover images of anime and manga in your AniList collection.",
+    "author": "Seanime",
+    "icon": "https://raw.githubusercontent.com/5rahim/seanime-extensions/main/plugins/custom-cover-images/icon.png",
+    "website": "https://github.com/5rahim/seanime-extensions",
+    "lang": "multi"
+  },
+  {
     "id": "gojowtf",
     "name": "GojoWtf",
     "description": "GojoWtf is an online streaming provider for subbed & dubbed anime in English. It supports two providers: Strix and Pahe, both of which support subs & dubs.",
