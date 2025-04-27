@@ -6,7 +6,7 @@
 function init() {
     $app.onGetAnimeCollection((e) => {
         const animeDataSet: Record<string, { bannerImage: string, title: string }> = {}
-        for (const list of e.animeCollection?.mediaListCollection?.lists || []) {
+        for (const list of e.animeCollection?.MediaListCollection?.lists || []) {
             for (const entry of list.entries || []) {
                 if (!entry?.media) continue
 

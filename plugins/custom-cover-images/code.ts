@@ -123,22 +123,22 @@ function init() {
             ])
 
             let animeCollectionObject: Record<string, any> = {}
-            if (_animeCollection?.mediaListCollection?.lists?.length) {
-                for (let i = 0; i < _animeCollection!.mediaListCollection!.lists!.length; i++) {
-                    for (let j = 0; j < _animeCollection!.mediaListCollection!.lists![i]!.entries!.length; j++) {
-                        const mediaId = _animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
-                        animeCollectionObject[mediaId.toString()] = _animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media
+            if (_animeCollection?.MediaListCollection?.lists?.length) {
+                for (let i = 0; i < _animeCollection!.MediaListCollection!.lists!.length; i++) {
+                    for (let j = 0; j < _animeCollection!.MediaListCollection!.lists![i]!.entries!.length; j++) {
+                        const mediaId = _animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.id
+                        animeCollectionObject[mediaId.toString()] = _animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media
                     }
                 }
             }
             animeCollection.set(animeCollectionObject)
 
             let mangaCollectionObject: Record<string, any> = {}
-            if (_mangaCollection?.mediaListCollection?.lists?.length) {
-                for (let i = 0; i < _mangaCollection!.mediaListCollection!.lists!.length; i++) {
-                    for (let j = 0; j < _mangaCollection!.mediaListCollection!.lists![i]!.entries!.length; j++) {
-                        const mediaId = _mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
-                        mangaCollectionObject[mediaId.toString()] = _mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media
+            if (_mangaCollection?.MediaListCollection?.lists?.length) {
+                for (let i = 0; i < _mangaCollection!.MediaListCollection!.lists!.length; i++) {
+                    for (let j = 0; j < _mangaCollection!.MediaListCollection!.lists![i]!.entries!.length; j++) {
+                        const mediaId = _mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.id
+                        mangaCollectionObject[mediaId.toString()] = _mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media
                     }
                 }
             }
@@ -228,20 +228,20 @@ function init() {
             e.next()
             return
         }
-        if (!e.animeCollection?.mediaListCollection?.lists?.length) {
+        if (!e.animeCollection?.MediaListCollection?.lists?.length) {
             e.next()
             return
         }
 
 
-        for (let i = 0; i < e.animeCollection!.mediaListCollection!.lists!.length; i++) {
-            for (let j = 0; j < e.animeCollection!.mediaListCollection!.lists![i]!.entries!.length; j++) {
-                const mediaId = e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
+        for (let i = 0; i < e.animeCollection!.MediaListCollection!.lists!.length; i++) {
+            for (let j = 0; j < e.animeCollection!.MediaListCollection!.lists![i]!.entries!.length; j++) {
+                const mediaId = e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const coverImage = coverImages[mediaId.toString()]
                 if (!!coverImage) {
-                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
-                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
-                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
+                    e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
+                    e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
+                    e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
                 }
             }
         }
@@ -252,7 +252,7 @@ function init() {
     // Same as onGetAnimeCollection but also includes custom lists.
     $app.onGetRawAnimeCollection((e) => {
         const coverImages = $storage.get<Record<string, string | undefined>>("coverImages")
-        if (!e.animeCollection?.mediaListCollection?.lists?.length) {
+        if (!e.animeCollection?.MediaListCollection?.lists?.length) {
             e.next()
             return
         }
@@ -262,14 +262,14 @@ function init() {
             return
         }
 
-        for (let i = 0; i < e.animeCollection!.mediaListCollection!.lists!.length; i++) {
-            for (let j = 0; j < e.animeCollection!.mediaListCollection!.lists![i]!.entries!.length; j++) {
-                const mediaId = e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
+        for (let i = 0; i < e.animeCollection!.MediaListCollection!.lists!.length; i++) {
+            for (let j = 0; j < e.animeCollection!.MediaListCollection!.lists![i]!.entries!.length; j++) {
+                const mediaId = e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const coverImage = coverImages[mediaId.toString()]
                 if (!!coverImage) {
-                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
-                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
-                    e.animeCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
+                    e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
+                    e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
+                    e.animeCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
                 }
             }
         }
@@ -280,7 +280,7 @@ function init() {
     // Triggers the app loads the user's AniList manga collection
     $app.onGetMangaCollection((e) => {
         const coverImages = $storage.get<Record<string, string | undefined>>("coverImages")
-        if (!e.mangaCollection?.mediaListCollection?.lists?.length) {
+        if (!e.mangaCollection?.MediaListCollection?.lists?.length) {
             e.next()
             return
         }
@@ -289,14 +289,14 @@ function init() {
             return
         }
 
-        for (let i = 0; i < e.mangaCollection!.mediaListCollection!.lists!.length; i++) {
-            for (let j = 0; j < e.mangaCollection!.mediaListCollection!.lists![i]!.entries!.length; j++) {
-                const mediaId = e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
+        for (let i = 0; i < e.mangaCollection!.MediaListCollection!.lists!.length; i++) {
+            for (let j = 0; j < e.mangaCollection!.MediaListCollection!.lists![i]!.entries!.length; j++) {
+                const mediaId = e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const coverImage = coverImages[mediaId.toString()]
                 if (!!coverImage) {
-                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
-                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
-                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
+                    e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
+                    e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
+                    e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
                 }
             }
         }
@@ -307,7 +307,7 @@ function init() {
     // Same as onGetAnimeCollection but also includes custom lists.
     $app.onGetRawMangaCollection((e) => {
         const coverImages = $storage.get<Record<string, string | undefined>>("coverImages")
-        if (!e.mangaCollection?.mediaListCollection?.lists?.length) {
+        if (!e.mangaCollection?.MediaListCollection?.lists?.length) {
             e.next()
             return
         }
@@ -317,14 +317,14 @@ function init() {
             return
         }
 
-        for (let i = 0; i < e.mangaCollection!.mediaListCollection!.lists!.length; i++) {
-            for (let j = 0; j < e.mangaCollection!.mediaListCollection!.lists![i]!.entries!.length; j++) {
-                const mediaId = e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.id
+        for (let i = 0; i < e.mangaCollection!.MediaListCollection!.lists!.length; i++) {
+            for (let j = 0; j < e.mangaCollection!.MediaListCollection!.lists![i]!.entries!.length; j++) {
+                const mediaId = e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.id
                 const coverImage = coverImages[mediaId.toString()]
                 if (!!coverImage) {
-                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
-                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
-                    e.mangaCollection!.mediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
+                    e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.medium = coverImage
+                    e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.large = coverImage
+                    e.mangaCollection!.MediaListCollection!.lists![i]!.entries![j]!.media!.coverImage!.extraLarge = coverImage
                 }
             }
         }
