@@ -192,7 +192,6 @@ function init() {
                             continue
                         }
 
-                        console.log(titleSelection.attr("id"))
                         const title = ctx.dom.asElement(titleSelection.attr("id")!)
                         if (hideTitles && episodeNumber > progress) {
                             title?.setStyle("filter", "blur(4px)")
