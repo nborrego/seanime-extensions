@@ -20,9 +20,110 @@ function init() {
                 }
             }
         }
-        $storage.set("animeDataSet", animeDataSet)
+        $store.set("animeDataSet", animeDataSet)
 
         e.next()
+    })
+    $app.onGetCachedAnimeCollection((e) => {
+        const animeDataSet: Record<string, { bannerImage: string, title: string }> = {}
+        for (const list of e.animeCollection?.MediaListCollection?.lists || []) {
+            for (const entry of list.entries || []) {
+                if (!entry?.media) continue
+
+                if (animeDataSet[String(entry.media.id)]) {
+                    continue
+                }
+
+                animeDataSet[String(entry.media.id)] = {
+                    bannerImage: entry.media.bannerImage || entry.media.coverImage?.extraLarge || "",
+                    title: entry.media.title?.userPreferred || "",
+                }
+            }
+        }
+        $store.set("animeDataSet", animeDataSet)
+
+        e.next()
+    })
+
+    $app.onAnimeLibraryCollection((e) => {
+        const hideThumbnails = $storage.get("params.hideThumbnails") || false
+        const hideTitles = $storage.get("params.hideTitles") || false
+        const skipNextEpisode = $storage.get("params.skipNextEpisode") || false
+
+        if (skipNextEpisode) {
+            e.next()
+            return
+        }
+
+        if (!hideThumbnails && !hideTitles) {
+            e.next()
+            return
+        }
+
+        if (e.libraryCollection?.continueWatchingList) {
+            for (const episode of e.libraryCollection.continueWatchingList) {
+
+                if (hideThumbnails && episode.episodeMetadata?.image) {
+                    episode.episodeMetadata.image = episode.baseAnime?.bannerImage || episode.baseAnime?.coverImage?.extraLarge || ""
+                }
+
+                if (hideTitles) {
+                    episode.episodeTitle = episode.baseAnime?.title?.userPreferred || ""
+                }
+
+            }
+        }
+
+        e.next()
+    })
+
+    $app.onAnimeLibraryStreamCollection((e) => {
+        const hideThumbnails = $storage.get("params.hideThumbnails") || false
+        const hideTitles = $storage.get("params.hideTitles") || false
+        const skipNextEpisode = $storage.get("params.skipNextEpisode") || false
+
+        if (skipNextEpisode) {
+            e.next()
+            return
+        }
+
+        if (!hideThumbnails && !hideTitles) {
+            e.next()
+            return
+        }
+
+        if (e.streamCollection?.continueWatchingList) {
+            for (const episode of e.streamCollection.continueWatchingList) {
+
+                if (hideThumbnails && episode.episodeMetadata?.image) {
+                    episode.episodeMetadata.image = episode.baseAnime?.bannerImage || episode.baseAnime?.coverImage?.extraLarge || ""
+                }
+
+                if (hideTitles) {
+                    episode.episodeTitle = episode.baseAnime?.title?.userPreferred || ""
+                }
+
+            }
+        }
+
+        e.next()
+    })
+
+    $app.onMissingEpisodes((e) => {
+        const hideThumbnails = $storage.get("params.hideThumbnails") || false
+
+        if (!hideThumbnails) {
+            e.next()
+            return
+        }
+
+        if (e.missingEpisodes) {
+            for (const episode of e.missingEpisodes?.episodes || []) {
+                if (hideThumbnails && episode.episodeMetadata?.image) {
+                    episode.episodeMetadata.image = episode.baseAnime?.bannerImage || episode.baseAnime?.coverImage?.extraLarge || ""
+                }
+            }
+        }
     })
 
     $ui.register((ctx) => {
@@ -32,56 +133,27 @@ function init() {
             withContent: true,
         })
 
-        $anilist.getAnimeCollection(false)
+        ctx.screen.onNavigate((screen) => {
+            if (screen.pathname === "/") {
+                const hideThumbnails = $storage.get("params.hideThumbnails") || false
+                const hideTitles = $storage.get("params.hideTitles") || false
+
+                if (hideThumbnails || hideTitles) {
+                    $anilist.getAnimeCollection(false)
+                }
+            }
+        })
+        ctx.screen.loadCurrent()
 
         const [, refetchEpisodeCard] = ctx.dom.observe("[data-episode-card]", async (episodeCards) => {
             try {
                 const hideThumbnails = $storage.get("params.hideThumbnails") || false
                 const hideTitles = $storage.get("params.hideTitles") || false
                 const skipNextEpisode = $storage.get("params.skipNextEpisode") || false
-                const animeDataSet = $storage.get<Record<string, { bannerImage: string, title: string }>>("animeDataSet") || {}
+                const animeDataSet = $store.get<Record<string, { bannerImage: string, title: string }>>("animeDataSet") || {}
 
                 const listDataElement = await ctx.dom.queryOne("[data-anime-entry-list-data]")
                 if (!listDataElement) {
-                    for (const episodeCard of episodeCards) {
-                        const animeIdStr = episodeCard.attributes["data-media-id"]
-                        const animeId = Number(animeIdStr)
-
-                        if (!isNaN(animeId) && !!animeDataSet[String(animeId)]) {
-
-                            const $ = LoadDoc(episodeCard.innerHTML!)
-                            const imageSelection = $("[data-episode-card-image]")
-                            if (imageSelection.length() === 0 || !imageSelection.attr("id")) {
-                                continue
-                            }
-
-                            const image = ctx.dom.asElement(imageSelection.attr("id")!)
-
-                            const previous = JSON.parse(imageSelection.data("original") || "{}")
-
-                            if (hideThumbnails && !skipNextEpisode) {
-                                image.setProperty("src", animeDataSet[String(animeId)].bannerImage)
-                            } else if (previous.property?.src) {
-                                image.setProperty("src", previous.property.src)
-                            }
-
-                            const titleSelection = $("[data-episode-card-title]")
-                            if (titleSelection.length() === 0 || !titleSelection.attr("id")) {
-                                continue
-                            }
-
-                            const title = ctx.dom.asElement(titleSelection.attr("id")!)
-                            const titlePrevious = JSON.parse(titleSelection.data("original") || "{}")
-
-                            if (hideTitles && !skipNextEpisode) {
-                                title.setText(animeDataSet[String(animeId)].title)
-                            } else if (titlePrevious.text?.textContent) {
-                                title.setText(titlePrevious.text.textContent)
-                            }
-
-                        }
-                    }
-
                     return
                 }
                 const listDataStr = await listDataElement.getAttribute("data-anime-entry-list-data")
@@ -117,12 +189,20 @@ function init() {
                             continue
                         }
 
+                        console.log(titleSelection.attr("id"))
                         const title = ctx.dom.asElement(titleSelection.attr("id")!)
                         if (hideTitles && episodeNumber > progress) {
-                            title.setStyle("filter", "blur(4px)")
+                            title?.setStyle("filter", "blur(4px)")
                         } else {
-                            title.removeStyle("filter")
+                            title?.removeStyle("filter")
                         }
+
+                        // const title = await episodeCard.queryOne("[data-episode-card-title]")
+                        // if (hideTitles && episodeNumber > progress) {
+                        //     title?.setStyle("filter", "blur(4px)")
+                        // } else {
+                        //     title?.removeStyle("filter")
+                        // }
                     }
                 }
             }
@@ -130,6 +210,14 @@ function init() {
                 console.error("Error processing episodeCard", e)
             }
         }, { withInnerHTML: true, identifyChildren: true })
+
+        $store.watch("animeDataSet", (animeDataSet) => {
+            refetchEpisodeCard()
+        })
+
+        ctx.dom.observe("[data-episode-card-title]", async (episodeCards) => {
+            refetchEpisodeCard()
+        })
 
 
         const [, refetchEpisodeGridItem] = ctx.dom.observe("[data-episode-grid-item]", async (episodeGridItems) => {
@@ -233,7 +321,7 @@ function init() {
         }, { withInnerHTML: true, identifyChildren: true })
 
         ctx.dom.observe("[data-anime-entry-list-data]", async (episodeCards) => {
-            refetchEpisodeCard()
+            // refetchEpisodeCard()
             refetchEpisodeGridItem()
         })
 
@@ -241,6 +329,7 @@ function init() {
         const hideTitlesRef = ctx.fieldRef<boolean>()
         const hideDescriptionsRef = ctx.fieldRef<boolean>()
         const skipNextEpisodeRef = ctx.fieldRef<boolean>()
+
         function updateForm() {
             const params = $storage.get("params") || {}
             hideThumbnailsRef.setValue(params.hideThumbnails || false)
@@ -254,6 +343,7 @@ function init() {
         })
 
         ctx.registerEventHandler("save", () => {
+            $app.invalidateClientQuery(["ANIME-COLLECTION-get-library-collection", "ANIME-ENTRIES-get-anime-entry"])
             $storage.set("params", {
                 hideThumbnails: hideThumbnailsRef.current,
                 hideTitles: hideTitlesRef.current,
@@ -281,5 +371,11 @@ function init() {
             refetchEpisodeCard()
             refetchEpisodeGridItem()
         })
-    });
+
+        ctx.screen.onNavigate((screen) => {
+            refetchEpisodeCard()
+            refetchEpisodeGridItem()
+        })
+        ctx.screen.loadCurrent()
+    })
 }
