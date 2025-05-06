@@ -12,12 +12,24 @@
     "lang": "multi"
   },
   {
+    "id": "picked-for-you",
+    "name": "Picked For You",
+    "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Picked-For-You/refs/heads/main/src/picked-for-you.json",
+    "language": "typescript",
+    "type": "plugin",
+    "description": "Shows anime recommendations based on your most-watched genres.",
+    "author": "kRYstall9",
+    "icon": "https://raw.githubusercontent.com/kRYstall9/Picked-For-You/refs/heads/main/src/icons/recommendedicon.png",
+    "website": "",
+    "lang": "multi"
+  },
+  {
     "id": "episodeshistory",
     "name": "Episodes History",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/EpisodesHistory-Plugin/refs/heads/main/src/manifest.json",
     "language": "typescript",
     "type": "plugin",
-    "description": "A plugin that shows the episode watch history",
+    "description": "A plugin that shows the episode watch history.",
     "author": "kRYstall9",
     "icon": "https://raw.githubusercontent.com/kRYstall9/EpisodesHistory-Plugin/refs/heads/main/src/icons/double-check.png",
     "website": "",
@@ -29,7 +41,7 @@
     "manifestURI": "https://raw.githubusercontent.com/SyntaxSama/Seanime-Cookie-Clicker/refs/heads/main/manifest.json",
     "language": "typescript",
     "type": "plugin",
-    "description": "A cookie clicker",
+    "description": "A cookie clicker.",
     "author": "SyntaxSama",
     "icon": "",
     "website": "",
@@ -60,7 +72,7 @@
   {
     "id": "animeworld",
     "name": "AnimeWorld",
-    "description": "Extension for AnimeWorld, an online streaming provider for subbed & dubbed anime in Italian",
+    "description": "Extension for AnimeWorld, an online streaming provider for subbed & dubbed anime in Italian.",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/AnimeWorld/manifest.json",
     "author": "kRYstall9",
     "type": "onlinestream-provider",
@@ -70,7 +82,7 @@
   {
     "id": "animekai",
     "name": "AnimeKai",
-    "description": "AnimeKai is an online streaming provider for subbed & dubbed anime in English",
+    "description": "AnimeKai is an online streaming provider for subbed & dubbed anime in English.",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/AnimeKai/manifest.json",
     "author": "kRYstall9",
     "type": "onlinestream-provider",
@@ -102,7 +114,7 @@
   {
     "id": "animesaturn",
     "name": "AnimeSaturn",
-    "description": "AnimeSaturn is an online streaming provider for subbed & dubbed anime in Italian",
+    "description": "AnimeSaturn is an online streaming provider for subbed & dubbed anime in Italian.",
     "manifestURI": "https://raw.githubusercontent.com/kRYstall9/Seanime-streaming-providers/refs/heads/main/src/AnimeSaturn/manifest.json",
     "author": "kRYstall9",
     "type": "onlinestream-provider",
