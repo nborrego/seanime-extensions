@@ -1,4 +1,5 @@
-/// <reference path="../anime-torrent-provider.d.ts" />
+/// <reference path="./anime-torrent-provider.d.ts" />
+/// <reference path="./core.d.ts" />
 
 class Provider {
 
@@ -6,138 +7,115 @@ class Provider {
 
     getSettings(): AnimeProviderSettings {
         return {
-            canSmartSearch: false,
-            smartSearchFilters: [],
+            canSmartSearch: true,
+            smartSearchFilters: ["batch", "episodeNumber", "resolution"],
             supportsAdult: false,
             type: "main",
         }
     }
 
-    async fetchTorrents(url: string): Promise<NyaaTorrent[]> {
+    async search(opts: AnimeSearchOptions): Promise<AnimeTorrent[]> {
+        const query = `?q=${encodeURIComponent(opts.query)}&only_tor=1`
+        console.log(query)
+        const torrents = await this.fetchTorrents(query)
+        return torrents.map(t => this.toAnimeTorrent(t))
+    }
 
-        const furl = `${this.api}&q=+${encodeURIComponent(url)}&c=0_0`
+    async smartSearch(opts: AnimeSmartSearchOptions): Promise<AnimeTorrent[]> {
+        const ret: AnimeTorrent[] = []
+
+        if (opts.batch) {
+            if (!opts.anidbAID) return []
+
+            let torrents = await this.searchByAID(opts.anidbAID, opts.resolution)
+
+            if (!(opts.media.format == "MOVIE" || opts.media.episodeCount == 1)) {
+                torrents = torrents.filter(t => t.num_files > 1)
+            }
+
+            for (const torrent of torrents) {
+                const t = this.toAnimeTorrent(torrent)
+                t.isBatch = true
+                ret.push(t)
+            }
+
+            return ret
+        }
+
+        if (!opts.anidbEID) return []
+
+        const torrents = await this.searchByEID(opts.anidbEID, opts.resolution)
+
+        for (const torrent of torrents) {
+            ret.push(this.toAnimeTorrent(torrent))
+        }
+
+        return ret
+    }
+
+    async getTorrentInfoHash(torrent: AnimeTorrent): Promise<string> {
+        return torrent.infoHash || ""
+    }
+
+    async getTorrentMagnetLink(torrent: AnimeTorrent): Promise<string> {
+        return torrent.magnetLink || ""
+    }
+
+    async getLatest(): Promise<AnimeTorrent[]> {
+        const query = `?q=&only_tor=1`
+        const torrents = await this.fetchTorrents(query)
+        return torrents.map(t => this.toAnimeTorrent(t))
+    }
+
+    async searchByAID(aid: number, quality: string): Promise<ToshoTorrent[]> {
+        const q = encodeURIComponent(this.formatQuality(quality))
+        const query = `?order=size-d&aid=${aid}&q=${q}`
+        return this.fetchTorrents(query)
+    }
+
+    async searchByEID(eid: number, quality: string): Promise<ToshoTorrent[]> {
+        const q = encodeURIComponent(this.formatQuality(quality))
+        const query = `?eid=${eid}&q=${q}`
+        return this.fetchTorrents(query)
+    }
+
+    async fetchTorrents(url: string): Promise<ToshoTorrent[]> {
+        const furl = `${this.api}${url}`
 
         try {
-            console.log(furl)
             const response = await fetch(furl)
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch torrents, ${response.statusText}`)
             }
 
-            const xmlText = await response.text()
-            const torrents = this.parseXML(xmlText)
-            console.log(torrents)
+            const torrents: ToshoTorrent[] = await response.json()
 
-            return torrents
+            return torrents.map(t => {
+                if (t.seeders > 30000) {
+                    t.seeders = 0
+                }
+                if (t.leechers > 30000) {
+                    t.leechers = 0
+                }
+                return t
+            })
         }
         catch (error) {
             throw new Error(`Error fetching torrents: ${error}`)
         }
     }
 
-    private parseXML(xmlText: string): NyaaTorrent[] {
-        const torrents: NyaaTorrent[] = []
-
-        // Helper to extract content between XML tags
-        const getTagContent = (xml: string, tag: string): string => {
-            const regex = new RegExp(`<${tag}[^>]*>([^<]*)</${tag}>`)
-            const match = xml.match(regex)
-            return match ? match[1].trim() : ""
-        }
-
-        // Helper to extract content from nyaa namespace tags
-        const getNyaaTagContent = (xml: string, tag: string): string => {
-            const regex = new RegExp(`<nyaa:${tag}[^>]*>([^<]*)</nyaa:${tag}>`)
-            const match = xml.match(regex)
-            return match ? match[1].trim() : ""
-        }
-
-        // Split XML into items
-        const itemRegex = /<item>([\s\S]*?)<\/item>/g
-        let match
-
-        let id = 1
-        while ((match = itemRegex.exec(xmlText)) !== null) {
-            const itemXml = match[1]
-
-            const title = getTagContent(itemXml, "title")
-            const link = getTagContent(itemXml, "link")
-            const pubDate = getTagContent(itemXml, "pubDate")
-            const seeders = parseInt(getNyaaTagContent(itemXml, "seeders")) || 0
-            const leechers = parseInt(getNyaaTagContent(itemXml, "leechers")) || 0
-            const downloads = parseInt(getNyaaTagContent(itemXml, "downloads")) || 0
-            const infoHash = getNyaaTagContent(itemXml, "infoHash")
-            const size = getNyaaTagContent(itemXml, "size")
-
-            // Convert size string (e.g., "571.3 MiB") to bytes
-            const sizeInBytes = (() => {
-                const match = size.match(/^([\d.]+)\s*([KMGT]iB)$/)
-                if (!match) return 0
-                const [, num, unit] = match
-                const multipliers: { [key: string]: number } = {
-                    "KiB": 1024,
-                    "MiB": 1024 * 1024,
-                    "GiB": 1024 * 1024 * 1024,
-                    "TiB": 1024 * 1024 * 1024 * 1024
-                }
-                return Math.round(parseFloat(num) * multipliers[unit])
-            })()
-
-            const torrent: NyaaTorrent = {
-                id: id++,
-                title,
-                link,
-                timestamp: Math.floor(new Date(pubDate).getTime() / 1000),
-                status: "success",
-                torrent_url: link,
-                info_hash: infoHash,
-                magnet_uri: `magnet:?xt=urn:btih:${infoHash}`,
-                seeders,
-                leechers,
-                torrent_download_count: downloads,
-                total_size: sizeInBytes,
-                size,
-                num_files: 1,
-                anidb_aid: 0,
-                anidb_eid: 0,
-                anidb_fid: 0,
-                article_url: link,
-                article_title: title,
-                website_url: "https://nyaa.si"
-            }
-
-            torrents.push(torrent)
-        }
-
-        return torrents
+    formatQuality(quality: string): string {
+        return quality.replace(/p$/, "")
     }
 
-    async search(opts: AnimeSearchOptions): Promise<AnimeTorrent[]> {
-        console.log(opts)
-        const torrents = await this.fetchTorrents(opts.query)
-        return torrents.map(t => this.toAnimeTorrent(t))
-    }
-
-    async smartSearch(opts: AnimeSmartSearchOptions): Promise<AnimeTorrent[]> {
-        const ret: AnimeTorrent[] = []
-        return ret
-    }
-
-    async getTorrentInfoHash(torrent: AnimeTorrent): Promise<string> {
-        return torrent.infoHash!
-    }
-
-    async getTorrentMagnetLink(torrent: AnimeTorrent): Promise<string> {
-        return torrent.magnetLink!
-    }
-
-    toAnimeTorrent(torrent: NyaaTorrent): AnimeTorrent {
+    toAnimeTorrent(torrent: ToshoTorrent): AnimeTorrent {
         return {
             name: torrent.title,
             date: new Date(torrent.timestamp * 1000).toISOString(),
             size: torrent.total_size,
-            formattedSize: torrent.size,
+            formattedSize: "",
             seeders: torrent.seeders,
             leechers: torrent.leechers,
             downloadCount: torrent.torrent_download_count,
@@ -147,19 +125,19 @@ class Provider {
             infoHash: torrent.info_hash,
             resolution: "",
             isBatch: false,
+            episodeNumber: -1,
             isBestRelease: false,
-            confirmed: false,
+            confirmed: true,
         }
     }
 }
 
-type NyaaTorrent = {
+type ToshoTorrent = {
     id: number
     title: string
     link: string
     timestamp: number
     status: string
-    size: string
     tosho_id?: number
     nyaa_id?: number
     nyaa_subdom?: any
