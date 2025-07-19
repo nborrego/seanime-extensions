@@ -8,5 +8,5 @@
   "type": "anime-torrent-provider",
   "language": "typescript",
   "lang": "multi",
-  "payloadURI": "https://github.com/nborrego/seanime-extensions/blob/main/anime-torrent-providers/basic-nyaa/raw-nyaa.ts"
+  "payloadURI": "https://raw.githubusercontent.com/nborrego/seanime-extensions/refs/heads/main/anime-torrent-providers/basic-nyaa/raw-nyaa.ts"
 }
