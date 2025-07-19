@@ -2,7 +2,7 @@
 
 class Provider {
 
-    api = "https://nyaa.si/?page=rss"
+    api = "https://nyaa.si/?page=rss&c=1_4&f=0"
 
     getSettings(): AnimeProviderSettings {
         return {
