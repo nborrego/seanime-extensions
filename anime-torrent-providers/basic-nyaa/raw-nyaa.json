@@ -3,7 +3,7 @@
   "name": "Nyaa (Raw)",
   "description": "Nyaa Raw search",
   "manifestURI": "https://raw.githubusercontent.com/nborrego/seanime-extensions/refs/heads/main/anime-torrent-providers/basic-nyaa/raw-nyaa.json",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Nat",
   "type": "anime-torrent-provider",
   "language": "typescript",
