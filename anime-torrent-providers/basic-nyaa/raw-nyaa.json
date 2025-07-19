@@ -2,7 +2,7 @@
   "id": "raw-nyaa-seanime",
   "name": "Nyaa (Raw)",
   "description": "Nyaa Raw search",
-  "manifestURI": "https://raw.githubusercontent.com/5rahim/seanime-extensions/refs/heads/main/anime-torrent-providers/basic-nyaa/basic-nyaa.json",
+  "manifestURI": "https://raw.githubusercontent.com/nborrego/seanime-extensions/refs/heads/main/anime-torrent-providers/basic-nyaa/raw-nyaa.json",
   "version": "1.0.0",
   "author": "Nat",
   "type": "anime-torrent-provider",
