@@ -131,5 +131,16 @@
     "author": "Bas1874",
     "icon": "https://raw.githubusercontent.com/Bas1874/anilist-discussion/main/src/Icons/ad-Icon.png",
     "lang": "multi"
+  },
+  {
+    "id": "anime-notes",
+    "name": "Anime Notes",
+    "manifestURI": "https://raw.githubusercontent.com/faddix/anime-notes/main/anime-notes.json",
+    "language": "typescript",
+    "type": "plugin",
+    "description": "Add personal notes to anime entries",
+    "author": "Faddix",
+    "icon": "https://raw.githubusercontent.com/faddix/anime-notes/main/src/notepad.png",
+    "lang": "multi"
   }
 ]
